@@ -22,7 +22,6 @@ public class SettingsMenuController : MonoBehaviour
     [SerializeField] private TMP_Dropdown resolutionDropdown;
     [SerializeField] private TMP_Dropdown qualityDropdown;
 
-    private Resolution[] resolutions;
     private GameSettingsData current;
     private readonly List<Resolution> filtered = new();
 
@@ -33,20 +32,25 @@ public class SettingsMenuController : MonoBehaviour
         SetupQualityDropdown();
         SetupResolutionDropdown();
         BindUI();
+
         PopulateUIFromData(current);
         ApplySettings(current, save: false);
+
+        // Standard startup: settings hidden, main shown
+        if (settingsPanel != null) settingsPanel.SetActive(false);
+        if (mainButtonsPanel != null) mainButtonsPanel.SetActive(true);
     }
 
     public void OpenSettings()
     {
-        mainButtonsPanel.SetActive(false);
-        settingsPanel.SetActive(true);
+        if (mainButtonsPanel != null) mainButtonsPanel.SetActive(false);
+        if (settingsPanel != null) settingsPanel.SetActive(true);
     }
 
     public void CloseSettings()
     {
-        settingsPanel.SetActive(false);
-        mainButtonsPanel.SetActive(true);
+        if (settingsPanel != null) settingsPanel.SetActive(false);
+        if (mainButtonsPanel != null) mainButtonsPanel.SetActive(true);
     }
 
     public void ApplyPressed()
@@ -55,19 +59,29 @@ public class SettingsMenuController : MonoBehaviour
         ApplySettings(current, save: true);
     }
 
+    public void ResetToDefaults()
+    {
+        current = new GameSettingsData();
+        PopulateUIFromData(current);
+        ApplySettings(current, save: true);
+    }
+
     private void SetupQualityDropdown()
     {
+        if (qualityDropdown == null) return;
+
         qualityDropdown.ClearOptions();
         qualityDropdown.AddOptions(new List<string>(QualitySettings.names));
     }
 
     private void SetupResolutionDropdown()
     {
-        resolutions = Screen.resolutions;
+        if (resolutionDropdown == null) return;
+
         filtered.Clear();
 
         HashSet<string> seen = new();
-        foreach (var r in resolutions)
+        foreach (var r in Screen.resolutions)
         {
             string key = $"{r.width}x{r.height}";
             if (seen.Add(key)) filtered.Add(r);
@@ -83,55 +97,76 @@ public class SettingsMenuController : MonoBehaviour
 
     private void BindUI()
     {
-        masterSlider.onValueChanged.AddListener(v => masterValueText.text = Mathf.RoundToInt(v * 100) + "%");
-        musicSlider.onValueChanged.AddListener(v => musicValueText.text = Mathf.RoundToInt(v * 100) + "%");
-        sfxSlider.onValueChanged.AddListener(v => sfxValueText.text = Mathf.RoundToInt(v * 100) + "%");
+        if (masterSlider != null && masterValueText != null)
+            masterSlider.onValueChanged.AddListener(v => masterValueText.text = $"{Mathf.RoundToInt(v * 100)}%");
+
+        if (musicSlider != null && musicValueText != null)
+            musicSlider.onValueChanged.AddListener(v => musicValueText.text = $"{Mathf.RoundToInt(v * 100)}%");
+
+        if (sfxSlider != null && sfxValueText != null)
+            sfxSlider.onValueChanged.AddListener(v => sfxValueText.text = $"{Mathf.RoundToInt(v * 100)}%");
     }
 
     private void PopulateUIFromData(GameSettingsData d)
     {
-        masterSlider.value = d.masterVolume;
-        musicSlider.value = d.musicVolume;
-        sfxSlider.value = d.sfxVolume;
+        if (masterSlider != null) masterSlider.value = d.masterVolume;
+        if (musicSlider != null) musicSlider.value = d.musicVolume;
+        if (sfxSlider != null) sfxSlider.value = d.sfxVolume;
 
-        fullscreenToggle.isOn = d.fullscreen;
+        if (fullscreenToggle != null) fullscreenToggle.isOn = d.fullscreen;
 
-        qualityDropdown.value = Mathf.Clamp(d.qualityIndex, 0, QualitySettings.names.Length - 1);
-        resolutionDropdown.value = Mathf.Clamp(d.resolutionIndex, 0, Mathf.Max(0, filtered.Count - 1));
+        if (qualityDropdown != null && QualitySettings.names.Length > 0)
+            qualityDropdown.value = Mathf.Clamp(d.qualityIndex, 0, QualitySettings.names.Length - 1);
 
-        masterValueText.text = Mathf.RoundToInt(masterSlider.value * 100) + "%";
-        musicValueText.text = Mathf.RoundToInt(musicSlider.value * 100) + "%";
-        sfxValueText.text = Mathf.RoundToInt(sfxSlider.value * 100) + "%";
+        if (resolutionDropdown != null && filtered.Count > 0)
+            resolutionDropdown.value = Mathf.Clamp(d.resolutionIndex, 0, filtered.Count - 1);
+
+        if (masterValueText != null && masterSlider != null)
+            masterValueText.text = $"{Mathf.RoundToInt(masterSlider.value * 100)}%";
+        if (musicValueText != null && musicSlider != null)
+            musicValueText.text = $"{Mathf.RoundToInt(musicSlider.value * 100)}%";
+        if (sfxValueText != null && sfxSlider != null)
+            sfxValueText.text = $"{Mathf.RoundToInt(sfxSlider.value * 100)}%";
     }
 
     private void ReadUIToData(GameSettingsData d)
     {
-        d.masterVolume = masterSlider.value;
-        d.musicVolume = musicSlider.value;
-        d.sfxVolume = sfxSlider.value;
-        d.fullscreen = fullscreenToggle.isOn;
-        d.qualityIndex = qualityDropdown.value;
-        d.resolutionIndex = resolutionDropdown.value;
+        if (masterSlider != null) d.masterVolume = masterSlider.value;
+        if (musicSlider != null) d.musicVolume = musicSlider.value;
+        if (sfxSlider != null) d.sfxVolume = sfxSlider.value;
+
+        if (fullscreenToggle != null) d.fullscreen = fullscreenToggle.isOn;
+        if (qualityDropdown != null) d.qualityIndex = qualityDropdown.value;
+        if (resolutionDropdown != null) d.resolutionIndex = resolutionDropdown.value;
     }
 
     private void ApplySettings(GameSettingsData d, bool save)
     {
-        // Global volume (will route music/sfx through AudioMixer later)
+        // Audio
         AudioListener.volume = d.masterVolume;
 
-        QualitySettings.SetQualityLevel(d.qualityIndex);
+        // Quality
+        if (QualitySettings.names.Length > 0)
+        {
+            int q = Mathf.Clamp(d.qualityIndex, 0, QualitySettings.names.Length - 1);
+            QualitySettings.SetQualityLevel(q, true);
+            d.qualityIndex = q;
+        }
 
-        int idx = Mathf.Clamp(d.resolutionIndex, 0, Mathf.Max(0, filtered.Count - 1));
+        // Resolution + Fullscreen
         if (filtered.Count > 0)
         {
+            int idx = Mathf.Clamp(d.resolutionIndex, 0, filtered.Count - 1);
             var r = filtered[idx];
             Screen.SetResolution(r.width, r.height, d.fullscreen);
+            d.resolutionIndex = idx;
         }
         else
         {
             Screen.fullScreen = d.fullscreen;
         }
 
-        if (save) SettingsSystem.Save(d);
+        if (save)
+            SettingsSystem.Save(d);
     }
 }

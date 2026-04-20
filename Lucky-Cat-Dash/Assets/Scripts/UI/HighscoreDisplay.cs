@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class HighScoresDisplay : MonoBehaviour
 {
-    [SerializeField] private TMP_Text[] scoreLines; // assign 5 rows in Inspector
+    [SerializeField] private TMP_Text[] scoreLines; // 5 rows
 
     public void Refresh()
     {
         if (DatabaseManager.Instance == null)
         {
-            Debug.LogError("DatabaseManager.Instance is null. Ensure __App exists in scene.");
+            Debug.LogError("DatabaseManager.Instance is null. Ensure __App exists in MainMenu.");
             return;
         }
 
