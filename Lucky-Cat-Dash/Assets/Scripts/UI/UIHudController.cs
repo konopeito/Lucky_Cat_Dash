@@ -42,12 +42,14 @@ public class UIHudController : MonoBehaviour
 
     private void HandleLuckChanged(float current, float max)
     {
+        if (luckSlider == null) return;
         luckSlider.maxValue = max;
         luckSlider.value = current;
     }
 
     private void HandleCharmChanged(int count)
     {
-        charmText.text = $"Charms: {count}";
+        if (charmText != null)
+            charmText.text = $"Charms: {count}";
     }
 }

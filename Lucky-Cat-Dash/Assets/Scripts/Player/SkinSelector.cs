@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// Manages the player's cat skin selection.
 /// Skins are stored by ID in SaveData.unlockedSkins.
-/// Attach this to the player GameObject alongside a SpriteRenderer.
+/// **note to Attach this to the player GameObject alongside a SpriteRenderer.
 /// </summary>
 [RequireComponent(typeof(SpriteRenderer))]
 public class SkinSelector : MonoBehaviour
@@ -49,7 +49,10 @@ public class SkinSelector : MonoBehaviour
     public bool IsSkinUnlocked(string skinId)
     {
         SaveData data = SaveSystem.Load();
-        return data.unlockedSkins.Contains(skinId);
+        string[] ids = data.unlockedSkins.Split(',');
+        foreach (var id in ids)
+            if (id.Trim() == skinId) return true;
+        return false;
     }
 
     public void UnlockAndApplySkin(string skinId)

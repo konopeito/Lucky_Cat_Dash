@@ -23,7 +23,10 @@ public class GameOverSaveHandler : MonoBehaviour
     {
         string playerName = playerNameInput != null ? playerNameInput.text : "Player";
         DatabaseManager.Instance.SaveScore(playerName, finalScore, completionTime);
-
+        if (DatabaseManager.Instance != null)
+            DatabaseManager.Instance.SaveScore(playerName, finalScore, completionTime);
         SceneManager.LoadScene(levelSceneName);
+
     }
+
 }
