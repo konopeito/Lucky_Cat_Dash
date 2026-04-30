@@ -73,4 +73,13 @@ public class GameManager : MonoBehaviour
         matchActive = false;
         SceneManager.LoadScene("MainMenu");
     }
+    public int GetFinalScore()
+    {
+        return charmsCollectedThisMatch;
+    }
+
+    public float GetCompletionTime()
+    {
+        return matchTimer;
+    }
 }

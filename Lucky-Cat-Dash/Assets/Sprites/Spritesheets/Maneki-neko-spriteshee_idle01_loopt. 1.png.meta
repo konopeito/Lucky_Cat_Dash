@@ -1,0 +1,334 @@
+fileFormatVersion: 2
+guid: 859ab700e1dee054a906b7eb8bbe0ea2
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 0
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 20
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Maneki-neko-spriteshee_idle01_loopt. 1_0
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 0
+        width: 41
+        height: 49
+      alignment: 9
+      pivot: {x: 0.5, y: 0.203}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb4a971de290f5b459c490615e0c5199
+      internalID: 610221581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Maneki-neko-spriteshee_idle01_loopt. 1_1
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 0
+        width: 41
+        height: 49
+      alignment: 9
+      pivot: {x: 0.5, y: 0.203}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab1aa00d1d3ddc642ba4424f7ddaca93
+      internalID: 1102213286
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Maneki-neko-spriteshee_idle01_loopt. 1_2
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 0
+        width: 41
+        height: 49
+      alignment: 9
+      pivot: {x: 0.5, y: 0.203}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a5517037f45ffb44bd0d5c06f898fd6
+      internalID: -482848510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Maneki-neko-spriteshee_idle01_loopt. 1_3
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 0
+        width: 41
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.203}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2e3a57623c02b047a8e3561eb0efc5d
+      internalID: -1058292939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Maneki-neko-spriteshee_idle01_loopt. 1_4
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 0
+        width: 41
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.203}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26bcd8a72c80c894badaa3985c8d2f70
+      internalID: 629122962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Maneki-neko-spriteshee_idle01_loopt. 1_5
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 0
+        width: 41
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.203}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2ff7cd88d9d7574e967f2a174960490
+      internalID: 1744994848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Maneki-neko-spriteshee_idle01_loopt. 1_6
+      rect:
+        serializedVersion: 2
+        x: 339
+        y: 0
+        width: 41
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.203}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a457a6f6325c91e409f8da9bcca5328c
+      internalID: -291104747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Maneki-neko-spriteshee_idle01_loopt. 1_7
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 0
+        width: 41
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.203}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 858c704fac737e04ca5da8c9f97699a9
+      internalID: -2018896655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Maneki-neko-spriteshee_idle01_loopt. 1_8
+      rect:
+        serializedVersion: 2
+        x: 451
+        y: 0
+        width: 41
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.203}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac2251d249528724da93ea6589bbd880
+      internalID: -1730201137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Maneki-neko-spriteshee_idle01_loopt. 1_9
+      rect:
+        serializedVersion: 2
+        x: 507
+        y: 0
+        width: 41
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.203}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7e3b039bc9fdff448ea831b98ecde9d
+      internalID: 239326554
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Maneki-neko-spriteshee_idle01_loopt. 1_0: 610221581
+      Maneki-neko-spriteshee_idle01_loopt. 1_1: 1102213286
+      Maneki-neko-spriteshee_idle01_loopt. 1_2: -482848510
+      Maneki-neko-spriteshee_idle01_loopt. 1_3: -1058292939
+      Maneki-neko-spriteshee_idle01_loopt. 1_4: 629122962
+      Maneki-neko-spriteshee_idle01_loopt. 1_5: 1744994848
+      Maneki-neko-spriteshee_idle01_loopt. 1_6: -291104747
+      Maneki-neko-spriteshee_idle01_loopt. 1_7: -2018896655
+      Maneki-neko-spriteshee_idle01_loopt. 1_8: -1730201137
+      Maneki-neko-spriteshee_idle01_loopt. 1_9: 239326554
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
