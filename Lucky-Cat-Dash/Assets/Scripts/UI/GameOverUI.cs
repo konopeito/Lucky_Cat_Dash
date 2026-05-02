@@ -68,7 +68,8 @@ public class GameOverUIController : MonoBehaviour
     public void ViewHighScores()
     {
         SubmitScore();
-        SceneManager.LoadScene(highScoresSceneName);
+        RunResultCache.Clear();
+        SceneManager.LoadScene(mainMenuSceneName); 
     }
 
     private string FormatTime(float seconds)
