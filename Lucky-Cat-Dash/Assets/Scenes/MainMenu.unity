@@ -3665,12 +3665,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96149d21bf835f541a9e7cf802fb8a0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreLines:
-  - {fileID: 1166131401}
-  - {fileID: 1058078164}
-  - {fileID: 956105023}
-  - {fileID: 2100399238}
-  - {fileID: 1256591785}
+  rows: []
+  mainMenu: {fileID: 820919233}
 --- !u!1 &664590243
 GameObject:
   m_ObjectHideFlags: 0
@@ -6714,6 +6710,11 @@ MonoBehaviour:
   matchActive: 0
   matchTimer: 0
   charmsCollectedThisMatch: 0
+  yenCollectedThisMatch: 0
+  yenPerLuckBonus: 20
+  luckMultiplierIncreasePerBonus: 0.05
+  maxLuckMultiplier: 3
+  localPlayerLuck: {fileID: 0}
 --- !u!114 &1030414806
 MonoBehaviour:
   m_ObjectHideFlags: 0
