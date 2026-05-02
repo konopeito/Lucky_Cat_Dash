@@ -4,34 +4,51 @@ using UnityEngine;
 
 public class HighScoresDisplay : MonoBehaviour
 {
-    [SerializeField] private TMP_Text[] scoreLines; // 5 rows
+    [Header("UI")]
+    [Tooltip("5 TMP_Text elements (Rank 1..5).")]
+    public TMP_Text[] rows;
 
-    public void Refresh()
-    {
-        if (DatabaseManager.Instance == null)
-        {
-            Debug.LogError("DatabaseManager.Instance is null. Ensure __App exists in MainMenu.");
-            return;
-        }
-
-        List<DatabaseManager.HighScoreEntry> top = DatabaseManager.Instance.GetTopHighScores(5);
-
-        for (int i = 0; i < scoreLines.Length; i++)
-        {
-            if (i < top.Count)
-            {
-                var e = top[i];
-                scoreLines[i].text = $"{i + 1}. {e.playerName} | {e.score} | {e.completionTime:F2}s";
-            }
-            else
-            {
-                scoreLines[i].text = $"{i + 1}. ---";
-            }
-        }
-    }
+    [Header("Optional (for Back button)")]
+    [SerializeField] private MainMenuController mainMenu;
 
     private void OnEnable()
     {
         Refresh();
+    }
+
+    public void Refresh()
+    {
+        List<DatabaseManager.HighScoreEntry> top = DatabaseManager.Instance != null
+            ? DatabaseManager.Instance.GetTopHighScores(5)
+            : new List<DatabaseManager.HighScoreEntry>();
+
+        for (int i = 0; i < rows.Length; i++)
+        {
+            if (rows[i] == null) continue;
+
+            if (i < top.Count)
+            {
+                var e = top[i];
+                rows[i].text = $"{i + 1}. {e.playerName}  |  {e.score} pts  |  {FormatTime(e.completionTime)}";
+            }
+            else
+            {
+                rows[i].text = $"{i + 1}. ---";
+            }
+        }
+    }
+
+    public void Back()
+    {
+        // Panel workflow: just close the panel
+        if (mainMenu != null) mainMenu.CloseHighScoresPanel();
+        else gameObject.SetActive(false); // fallback
+    }
+
+    private string FormatTime(float seconds)
+    {
+        int m = Mathf.FloorToInt(seconds / 60f);
+        float s = seconds % 60f;
+        return $"{m:00}:{s:00.00}";
     }
 }

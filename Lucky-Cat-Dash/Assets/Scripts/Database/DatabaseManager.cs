@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-//Attempted to use/install sqlite but it caused build issues(despite following all steps), so switched to JSON file storage for simplicity and reliability across platforms.
+
+using SQLite;         
+using SQLitePCL;     
+
 public class DatabaseManager : MonoBehaviour
 {
     public static DatabaseManager Instance { get; private set; }
@@ -16,15 +19,8 @@ public class DatabaseManager : MonoBehaviour
         public float completionTime;
     }
 
-    [Serializable]
-    private class HighScoreData
-    {
-        public List<HighScoreEntry> scores = new List<HighScoreEntry>();
-        public int nextId = 1;
-    }
-
-    private string _savePath;
-    private HighScoreData _data;
+    private SQLiteConnection _db;
+    private string _dbPath;
 
     private void Awake()
     {
@@ -35,100 +31,87 @@ public class DatabaseManager : MonoBehaviour
         }
 
         Instance = this;
+
+        if (transform.parent != null) transform.SetParent(null);
         DontDestroyOnLoad(gameObject);
 
         InitializeDatabase();
     }
 
-    private void InitializeDatabase()
+    private void OnDestroy()
     {
-        _savePath = Path.Combine(Application.persistentDataPath, "highscores.json");
-        LoadFromDisk();
-        Debug.Log("High score data path: " + _savePath);
+        if (_db != null)
+        {
+            _db.Close();
+            _db = null;
+        }
     }
 
+    private void InitializeDatabase()
+    {
+       
+        Batteries_V2.Init();
+
+        _dbPath = Path.Combine(Application.persistentDataPath, "highscores.db");
+        _db = new SQLiteConnection(_dbPath);
+
+        CreateHighScoresTable();
+
+        Debug.Log("[DatabaseManager] SQLite DB path: " + _dbPath);
+    }
+
+    // Step 4: Create table (SQL)
+    private void CreateHighScoresTable()
+    {
+        
+        _db.Execute(@"
+            CREATE TABLE IF NOT EXISTS HighScores (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                playerName TEXT NOT NULL,
+                score INTEGER NOT NULL,
+                completionTime REAL NOT NULL
+            );
+        ");
+
+        _db.Execute(@"
+            CREATE INDEX IF NOT EXISTS idx_HighScores_score_time
+            ON HighScores(score DESC, completionTime ASC);
+        ");
+    }
+
+    // Step 5: INSERT (SQL)
     public void SaveScore(string playerName, int score, float completionTime)
     {
         if (string.IsNullOrWhiteSpace(playerName))
             playerName = "Player";
 
-        var entry = new HighScoreEntry
-        {
-            id = _data.nextId++,
-            playerName = playerName.Trim(),
-            score = score,
-            completionTime = completionTime
-        };
+        playerName = playerName.Trim();
 
-        _data.scores.Add(entry);
-        SaveToDisk();
+        // Parameterized SQL 
+        _db.Execute(
+            "INSERT INTO HighScores (playerName, score, completionTime) VALUES (?, ?, ?);",
+            playerName, score, completionTime
+        );
     }
 
+    // Step 6: SELECT top N ordered (SQL)
     public List<HighScoreEntry> GetTopHighScores(int limit = 5)
     {
-        // Return a sorted copy (score desc, then faster time asc)
-        List<HighScoreEntry> sorted = new List<HighScoreEntry>(_data.scores);
-        sorted.Sort((a, b) =>
-        {
-            int scoreCompare = b.score.CompareTo(a.score);
-            if (scoreCompare != 0) return scoreCompare;
-            return a.completionTime.CompareTo(b.completionTime);
-        });
-
         if (limit < 0) limit = 0;
-        if (sorted.Count > limit)
-            sorted = sorted.GetRange(0, limit);
 
-        return sorted;
+        // Query maps returned columns into HighScoreEntry fields (by name)
+        return _db.Query<HighScoreEntry>(
+            @"SELECT id, playerName, score, completionTime
+              FROM HighScores
+              ORDER BY score DESC, completionTime ASC
+              LIMIT ?;",
+            limit
+        );
     }
 
     public void ClearAllScores()
     {
-        _data = new HighScoreData();
-        SaveToDisk();
-    }
-
-    private void LoadFromDisk()
-    {
-        if (!File.Exists(_savePath))
-        {
-            _data = new HighScoreData();
-            SaveToDisk(); // create file
-            return;
-        }
-
-        try
-        {
-            string json = File.ReadAllText(_savePath);
-            _data = JsonUtility.FromJson<HighScoreData>(json);
-
-            if (_data == null)
-                _data = new HighScoreData();
-
-            if (_data.scores == null)
-                _data.scores = new List<HighScoreEntry>();
-
-            if (_data.nextId < 1)
-                _data.nextId = _data.scores.Count + 1;
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning("Failed to load highscores.json, creating new data. " + e.Message);
-            _data = new HighScoreData();
-            SaveToDisk();
-        }
-    }
-
-    private void SaveToDisk()
-    {
-        try
-        {
-            string json = JsonUtility.ToJson(_data, true);
-            File.WriteAllText(_savePath, json);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError("Failed to save highscores.json: " + e.Message);
-        }
+        _db.Execute("DELETE FROM HighScores;");
+        try { _db.Execute("VACUUM;"); } catch { }
     }
 }

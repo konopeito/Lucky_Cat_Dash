@@ -73,12 +73,12 @@ public class MainMenuController : MonoBehaviour
         if (highScoresPanel != null) highScoresPanel.SetActive(false);
         if (mainButtonsPanel != null) mainButtonsPanel.SetActive(true);
     }
-    public void OpenHighScores()
-    {
-        if (GameManager.Instance != null) GameManager.Instance.LoadScene("HighScores");
-        else if (sceneNav != null) sceneNav.LoadHighScores();
-        else UnityEngine.SceneManagement.SceneManager.LoadScene("HighScores");
-    }
+    //public void OpenHighScores()
+    //{
+    //    if (GameManager.Instance != null) GameManager.Instance.LoadScene("HighScores");
+    //    else if (sceneNav != null) sceneNav.LoadHighScores();
+    //    else UnityEngine.SceneManagement.SceneManager.LoadScene("HighScores");
+    //}
 
     public void OpenSettings()
     {
