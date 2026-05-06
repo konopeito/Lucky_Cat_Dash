@@ -40,7 +40,11 @@ public class RunTimer : MonoBehaviour
         Instance = this;
         //** reminder - For now I will keep per-level (DON'T DontDestroyOnLoad unless I rebind UI/player each scene)
     }
-
+    public void SetPaused(bool paused)
+    {
+        if (paused) Pause();
+        else Resume();
+    }
     private void Start()
     {
         ResetRun();

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -18,13 +19,18 @@ public class PlayerController2D : MonoBehaviour
     public float coyoteTime = 0.12f;
     public float jumpBufferTime = 0.12f;
 
+    [Header("Luck Costs")]
+    [Tooltip("Luck cost for double jump.")]
+    public float doubleJumpLuckCost = 10f;
+
+    // NEW: UI feedback event (HUD can pulse double-jump icon)
+    public event Action OnDoubleJumpUsed;
+
     private Rigidbody2D rb;
     private LuckSystem luck;
     private PlayerAbilities abilities;
 
     private float moveInput;
-    private bool jumpPressed;
-    private bool dashPressed;
 
     private bool isGrounded;
     private bool hasUsedDoubleJump;
@@ -43,21 +49,27 @@ public class PlayerController2D : MonoBehaviour
 
     private void Update()
     {
+        // Input (Update)
         moveInput = Input.GetAxisRaw("Horizontal");
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            jumpPressed = true;
+            // Start/refresh jump buffer when Space is pressed
             jumpBufferCounter = jumpBufferTime;
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
-            dashPressed = true;
+        {
+            // Trigger dash immediately on key press
+            abilities.TryDash(moveInput);
+        }
 
         if (Input.GetKeyDown(KeyCode.R))
             Respawn();
 
-        jumpBufferCounter -= Time.deltaTime;
+        // decrement buffer timer
+        if (jumpBufferCounter > 0f)
+            jumpBufferCounter -= Time.deltaTime;
     }
 
     private void FixedUpdate()
@@ -65,12 +77,14 @@ public class PlayerController2D : MonoBehaviour
         CheckGround();
         HandleMove();
         HandleJump();
-        HandleAbilities();
+        HandleSlowFall();
     }
 
     private void CheckGround()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundMask);
+        bool groundedNow = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundMask);
+
+        isGrounded = groundedNow;
         if (isGrounded)
         {
             coyoteCounter = coyoteTime;
@@ -86,49 +100,46 @@ public class PlayerController2D : MonoBehaviour
     {
         rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
 
+        // Face direction
         if (moveInput > 0.01f) transform.localScale = new Vector3(1f, 1f, 1f);
         else if (moveInput < -0.01f) transform.localScale = new Vector3(-1f, 1f, 1f);
     }
 
     private void HandleJump()
     {
-        if (jumpBufferCounter > 0f)
+        // No buffered jump request
+        if (jumpBufferCounter <= 0f) return;
+
+        // 1) Normal jump (coyote time)
+        if (coyoteCounter > 0f)
         {
-            if (coyoteCounter > 0f)
+            DoJump();
+            jumpBufferCounter = 0f;
+            return;
+        }
+
+        // 2) Double jump (luck)
+        if (!isGrounded && !hasUsedDoubleJump && luck.CanDoubleJump)
+        {
+            if (luck.SpendLuck(doubleJumpLuckCost))
             {
                 DoJump();
+                OnDoubleJumpUsed?.Invoke(); // NEW: pulse icon, etc.
+                hasUsedDoubleJump = true;
                 jumpBufferCounter = 0f;
-                return;
-            }
-
-            if (!isGrounded && !hasUsedDoubleJump && luck.CanDoubleJump)
-            {
-                if (luck.SpendLuck(10f))
-                {
-                    DoJump();
-                    hasUsedDoubleJump = true;
-                    jumpBufferCounter = 0f;
-                }
             }
         }
-
-        jumpPressed = false;
     }
 
-    private void HandleAbilities()
+    private void HandleSlowFall()
     {
-        if (dashPressed)
-        {
-            abilities.TryDash(moveInput);
-            dashPressed = false;
-        }
-
         bool holdingJump = Input.GetKey(KeyCode.Space);
         abilities.TrySlowFall(holdingJump);
     }
 
     private void DoJump()
     {
+        // Reset vertical velocity for consistent jump height
         rb.velocity = new Vector2(rb.velocity.x, 0f);
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     }

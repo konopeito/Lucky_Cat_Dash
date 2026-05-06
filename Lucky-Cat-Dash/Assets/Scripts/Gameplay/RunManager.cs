@@ -69,7 +69,7 @@ public class RunManager : MonoBehaviour
         CharmsHeldThisRun = 0;
         _stampIndex = 0;
         _stampsCreated = 0;
-
+        ToriiGate.ResetToriiCount();
         OnLivesChanged?.Invoke(Lives);
         OnCharmsHeldChanged?.Invoke(CharmsHeldThisRun);
 
@@ -175,7 +175,7 @@ public class RunManager : MonoBehaviour
     {
         Debug.Log("[RunManager] Run failed (permadeath or time expired).");
 
-        // Compute completion time + score HERE 
+        // Compute completion time + score
         float completionTimeSeconds = RunTimer.Instance != null ? RunTimer.Instance.TimeElapsed : 0f;
 
         int charms = GameManager.Instance != null ? GameManager.Instance.charmsCollectedThisMatch : 0;
